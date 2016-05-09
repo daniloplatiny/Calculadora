@@ -7,212 +7,139 @@ import android.widget.TextView;
 import android.view.View;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity  {
 
     private Button btnUm, btnDois, btnTres, btnQuatro, btnCinco, btnSeis, btnSete, btnOito, btnNove, btnZero, btnSoma, btnLimpa, btnMul, btnDiv, btnIgual, btnSub;
     TextView mTextView ;
 
     private float  result=0;
     private float  numeroSalvo = 0 , numeroAtual = 0;
+    private int num;
     private String operacao =  "";
-    private boolean novoNumero = false;  // False quando estiver formando o numero True quando tiver formado
-
+    private boolean anteriorOperacao = false;  // False quando estiver formando o numero True quando tiver formado
+    private boolean emOperacao = false; // False se ainda nao tiver feito operacao True se ja tiver feito
+    private boolean temResultado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mTextView = (TextView) findViewById(R.id.numeroTexto);
+        mTextView.setTextSize(50);
+        mTextView.setText("Digite o valor");
 
-        mTextView  = (TextView) findViewById(R.id.numeroTexto);
-        mTextView.setText("0");
-
-        btnUm = (Button) findViewById(R.id.buttonOne);
-        btnDois = (Button) findViewById(R.id.buttonTwo);
-        btnTres = (Button) findViewById(R.id.buttonThree);
-        btnQuatro = (Button) findViewById(R.id.buttonFour);
-        btnCinco = (Button) findViewById(R.id.buttonFive);
-        btnSeis = (Button) findViewById(R.id.buttonSix);
-        btnSete = (Button) findViewById(R.id.buttonSeven);
-        btnOito = (Button) findViewById(R.id.buttonEight);
-        btnNove = (Button) findViewById(R.id.buttonNine);
-        btnZero = (Button) findViewById(R.id.buttonZero);
-        btnSoma = (Button) findViewById(R.id.buttonPlus);
-        btnSub = (Button) findViewById(R.id.buttonMinus);
-        btnMul = (Button) findViewById(R.id.buttonMul);
-        btnDiv = (Button) findViewById(R.id.buttonDiv);
-        btnLimpa = (Button) findViewById(R.id.buttonClear);
-        btnIgual = (Button) findViewById(R.id.buttonEqual);
-
-        try{
-            btnUm.setOnClickListener(this);
-            btnDois.setOnClickListener(this);
-            btnTres.setOnClickListener(this);
-            btnQuatro.setOnClickListener(this);
-            btnCinco.setOnClickListener(this);
-            btnSeis.setOnClickListener(this);
-            btnSete.setOnClickListener(this);
-            btnOito.setOnClickListener(this);
-            btnNove.setOnClickListener(this);
-            btnZero.setOnClickListener(this);
-            btnLimpa.setOnClickListener(this);
-            btnSoma.setOnClickListener(this);
-            btnSub.setOnClickListener(this);
-            btnMul.setOnClickListener(this);
-            btnDiv.setOnClickListener(this);
-            btnIgual.setOnClickListener(this);
-        }
-        catch(Exception e){
-
-        }
-
+    }
+    public void showNumber(float number){
+        mTextView.setText(Float.toString(number));
 
     }
 
+    public void pressNumber(View v){
+        Button button = (Button) v;
+        num = Integer.parseInt(button.getText().toString());
 
-    @Override
-    public void onClick(View arg0) {
-        switch (arg0.getId()) {
-            case R.id.buttonClear:
-                mTextView.setTextSize(50);
-                mTextView.setText("Digite o valor");
-                operacao = "";
-                numeroSalvo = 0;
-                numeroAtual = 0;
-                result = 0;
-                novoNumero = false;
-                break;
-
-            case R.id.buttonOne:
-                escreveNumero(1);
-                break;
-
-            case R.id.buttonTwo:
-                escreveNumero(2);
-                break;
-
-            case R.id.buttonThree:
-                escreveNumero(3);
-                break;
-                
-            case R.id.buttonFour:
-                escreveNumero(4);
-                break;
-                
-            case R.id.buttonFive:
-                escreveNumero(5);
-                break;
-                
-            case R.id.buttonSix:
-                escreveNumero(6);
-                break;
-                
-            case R.id.buttonSeven:
-                escreveNumero(7);
-                break;
-                
-            case R.id.buttonEight:
-                escreveNumero(8);
-                break;
-                
-            case R.id.buttonNine:
-                escreveNumero(9);
-                break;
-            
-            case R.id.buttonZero:
-                escreveNumero(0);
-                break;
-
-            case R.id.buttonPlus:
-                novoNumero = true; 
-                operacao = "soma";
-                calcula();
-                mTextView.setText(Float.toString(numeroAtual));
-                break;
-
-
-            case R.id.buttonMinus:
-                novoNumero = true;
-                operacao = "subtr";
-                calcula();
-                mTextView.setText(Float.toString(numeroAtual));
-                break;
-/*
-
-            case R.id.buttonMul:
-                novoNumero = true;
-                operacao = "soma";
-                mTextView.setText(Float.toString(result));
-                break;
-
-
-            case R.id.buttonDiv:
-                novoNumero = true;
-                operacao = "soma";
-                mTextView.setText(Float.toString(result));
-                break;
-
-
-            case R.id.buttonEqual:
-                if(operacao != "") {
-                    calcula();
-                    mTextView.setText(Float.toString(result));
-                    novoNumero = true;
-                    break;
-                }
-        */}
-    }
-
-    public void escreveNumero(int num) {
-        if (numeroAtual < 99999)
-            mTextView.setTextSize(70);
-        else {
-            mTextView.setTextSize(50);
-        }
-
-        if(novoNumero){
-            numeroSalvo = numeroAtual;
+        if (temResultado){
             numeroAtual = 0;
+            temResultado = false;
+
         }
 
-        numeroAtual = (numeroAtual * 10) + num;
-        mTextView.setText(Float.toString(numeroAtual));
-        novoNumero = false;
+        numeroAtual = num + numeroAtual * 10;
+        showNumber(numeroAtual);
+        emOperacao = true;
+
     }
-    
-    public void calcula(){
-        switch(operacao) {
+
+    public void pressClear(View v){
+
+        numeroAtual =0;
+        numeroSalvo = 0;
+        operacao = "";
+        emOperacao = false;
+        temResultado = false;
+        mTextView.setText("Digite o valor");
+    }
+
+    public void pressPlus(View v) {
+        if (emOperacao) {
+            numeroSalvo = numeroAtual;
+            operacao = "soma";
+            numeroAtual = 0;
+            anteriorOperacao = true;
+        }
+    }
+    public void pressMinus(View v){
+        if(emOperacao) {
+            numeroSalvo = numeroAtual;
+            operacao = "subtr";
+            numeroAtual = 0;
+            anteriorOperacao = true;
+        }
+    }
+
+    public void pressDiv(View v){
+        if(emOperacao) {
+            numeroSalvo = numeroAtual;
+            operacao = "div";
+            numeroAtual = 0;
+            anteriorOperacao = true;
+        }
+    }
+
+    public void pressMul(View v){
+        if(emOperacao) {
+            numeroSalvo = numeroAtual;
+            operacao = "multi";
+            numeroAtual = 0;
+            anteriorOperacao = true;
+        }
+    }
+
+    public void pressEqual(View v) {
+        calcula();
+    }
+    public void calcula() {
+        switch (operacao) {
             case "soma":
                 result = numeroAtual + numeroSalvo;
                 numeroAtual = result;
+                showNumber(result);
+                temResultado = true;
                 break;
 
             case "subtr":
                 result = numeroSalvo - numeroAtual;
                 numeroAtual = result;
+                showNumber(result);
+                temResultado = true;
                 break;
 
             case "multi":
                 result = numeroAtual * numeroSalvo;
                 numeroAtual = result;
+                showNumber(result);
+                temResultado = true;
                 break;
 
             case "div":
-                if (numeroAtual == 0){
+                if (numeroAtual == 0) {
                     mTextView.setText("Erro");
                     numeroAtual = 0;
                     numeroSalvo = 0;
                     result = 0;
+                    temResultado = true;
                     break;
+                }else{
+                    result = numeroSalvo / numeroAtual;
+                    numeroAtual = result;
+                    showNumber(result);
+                    temResultado = true;
                 }
-                result = numeroSalvo / numeroAtual ;
 
-                numeroAtual = result;
-
-                break;
 
         }
-
     }
+
 
 }
 
