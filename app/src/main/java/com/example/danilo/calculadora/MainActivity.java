@@ -9,16 +9,14 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity  {
 
-    private Button btnUm, btnDois, btnTres, btnQuatro, btnCinco, btnSeis, btnSete, btnOito, btnNove, btnZero, btnSoma, btnLimpa, btnMul, btnDiv, btnIgual, btnSub;
     TextView mTextView ;
 
     private float  result=0;
     private float  numeroSalvo = 0 , numeroAtual = 0;
     private int num;
     private String operacao =  "";
-    private boolean anteriorOperacao = false;  // False quando estiver formando o numero True quando tiver formado
     private boolean emOperacao = false; // False se ainda nao tiver feito operacao True se ja tiver feito
-    private boolean temResultado = false;
+    private boolean temResultado = false; // Se ja tiver um resultado é verdadeiro
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +29,6 @@ public class MainActivity extends AppCompatActivity  {
     }
     public void showNumber(float number){
         mTextView.setText(Float.toString(number));
-
     }
 
     public void pressNumber(View v){
@@ -65,7 +62,6 @@ public class MainActivity extends AppCompatActivity  {
             numeroSalvo = numeroAtual;
             operacao = "soma";
             numeroAtual = 0;
-            anteriorOperacao = true;
         }
     }
     public void pressMinus(View v){
@@ -73,7 +69,6 @@ public class MainActivity extends AppCompatActivity  {
             numeroSalvo = numeroAtual;
             operacao = "subtr";
             numeroAtual = 0;
-            anteriorOperacao = true;
         }
     }
 
@@ -82,7 +77,6 @@ public class MainActivity extends AppCompatActivity  {
             numeroSalvo = numeroAtual;
             operacao = "div";
             numeroAtual = 0;
-            anteriorOperacao = true;
         }
     }
 
@@ -91,7 +85,6 @@ public class MainActivity extends AppCompatActivity  {
             numeroSalvo = numeroAtual;
             operacao = "multi";
             numeroAtual = 0;
-            anteriorOperacao = true;
         }
     }
 
